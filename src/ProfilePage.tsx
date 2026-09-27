@@ -17,7 +17,6 @@ const AGENT = {
   listingCount: 8,
   collectionCount: 3,
   soldCount: 0,
-  joinYear: 2022,
 }
 
 const LISTINGS = [
@@ -196,9 +195,9 @@ function FilterDrawer({ filter, onApply, onClose }: {
           {/* Khu vực */}
           {section('Khu vực',
             <div className="space-y-2">
-              <select className="w-full text-sm border border-gray-200 rounded-xl px-3 py-2.5 bg-white outline-none focus:border-green-400">
-                <option>Tất cả tỉnh / thành</option>
-                <option selected>Đà Nẵng</option>
+              <select defaultValue="Đà Nẵng" className="w-full text-sm border border-gray-200 rounded-xl px-3 py-2.5 bg-white outline-none focus:border-green-400">
+                <option value="">Tất cả tỉnh / thành</option>
+                <option value="Đà Nẵng">Đà Nẵng</option>
               </select>
               <div className="grid grid-cols-2 gap-2">
                 <select className="text-sm border border-gray-200 rounded-xl px-3 py-2.5 bg-white outline-none focus:border-green-400">
@@ -284,7 +283,7 @@ function ListingCard({ l }: { l: typeof LISTINGS[0] }) {
     <div className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md border border-gray-100 hover:border-green-100 transition-all duration-200 cursor-pointer">
       {/* Image */}
       <div className="relative overflow-hidden" style={{ aspectRatio: '4/3' }}>
-        <img src={l.img} alt={l.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+        <img src={l.img} alt={l.title} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
         {/* Type badge */}
         <span className="absolute top-3 left-3 text-xs font-700 bg-green-600 text-white px-2.5 py-1 rounded-full">
           {l.type}
@@ -369,10 +368,10 @@ export default function ProfilePage() {
           </a>
           {/* Mobile icons */}
           <div className="flex items-center gap-2 lg:hidden">
-            <button onClick={() => setShowQR(true)} className="w-9 h-9 flex items-center justify-center rounded-xl border border-gray-200 text-gray-500">
+            <button aria-label="Xem mã QR" onClick={() => setShowQR(true)} className="w-9 h-9 flex items-center justify-center rounded-xl border border-gray-200 text-gray-500">
               <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="1.6" className="w-4 h-4"><rect x="1" y="1" width="6" height="6" rx="0.8"/><rect x="11" y="1" width="6" height="6" rx="0.8"/><rect x="1" y="11" width="6" height="6" rx="0.8"/><rect x="12" y="12" width="5" height="5" rx="0.5"/></svg>
             </button>
-            <button className="w-9 h-9 flex items-center justify-center rounded-xl border border-gray-200 text-gray-500">
+            <button aria-label="Chia sẻ trang" className="w-9 h-9 flex items-center justify-center rounded-xl border border-gray-200 text-gray-500">
               <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="1.6" className="w-4 h-4"><circle cx="14" cy="3.5" r="1.8"/><circle cx="4" cy="9" r="1.8"/><circle cx="14" cy="14.5" r="1.8"/><path d="M5.7 10 12.3 13M12.3 5 5.7 8"/></svg>
             </button>
           </div>
@@ -407,7 +406,7 @@ export default function ProfilePage() {
           <div className="mx-4 sm:mx-6 bg-white rounded-2xl -mt-8 relative shadow-sm border border-gray-100 px-5 sm:px-7 pt-4 pb-6 mb-4">
 
             {/* Avatar — sticks up above card into cover */}
-            <div className="relative flex-shrink-0 -mt-12 mb-3">
+            <div className="relative -mt-12 mb-3 w-fit">
               <div className="w-20 h-20 lg:w-24 lg:h-24 rounded-full bg-gradient-to-br from-green-500 to-emerald-700 border-4 border-white shadow-lg flex items-center justify-center text-white font-800 text-2xl select-none">
                 AB
               </div>
@@ -428,7 +427,7 @@ export default function ProfilePage() {
                   Gọi ngay
                 </a>
                 <a href={`https://zalo.me/${AGENT.zalo}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 bg-[#0068FF] hover:bg-blue-700 text-white font-700 text-sm px-4 py-2 rounded-xl transition-colors whitespace-nowrap">
-                  <span className="w-2 h-2 rounded-full bg-white/70 flex-shrink-0" />
+                  <svg viewBox="0 0 24 24" fill="currentColor" className="w-3.5 h-3.5"><path d="M12 2C6.48 2 2 6.48 2 12c0 2.54.94 4.86 2.5 6.63L3 22l3.67-1.33A9.96 9.96 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm-1 13H9V9h2v6zm4 0h-2V9h2v6z"/></svg>
                   Nhắn Zalo
                 </a>
                 <button className="flex items-center gap-1.5 border border-gray-300 hover:border-green-300 hover:bg-green-50 text-gray-700 hover:text-green-700 font-600 text-sm px-4 py-2 rounded-xl transition-colors whitespace-nowrap">
@@ -642,7 +641,7 @@ export default function ProfilePage() {
       </footer>
 
       {/* ── Mobile fixed bottom bar ── */}
-      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-30 bg-white border-t border-gray-200 px-4 py-3 flex gap-2 shadow-lg">
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-30 bg-white border-t border-gray-200 px-4 pt-3 pb-[max(12px,env(safe-area-inset-bottom))] flex gap-2 shadow-lg">
         <a href={`tel:${AGENT.phoneRaw}`} className="flex-1 flex items-center justify-center gap-1.5 bg-green-600 hover:bg-green-700 text-white font-700 text-sm py-3 rounded-xl transition-colors">
           <svg viewBox="0 0 16 16" fill="currentColor" className="w-4 h-4"><path d="M1.5 2a1 1 0 0 1 1-1h1.6a1 1 0 0 1 .99.836l.55 3.3a1 1 0 0 1-.528 1.06l-1.16.58a8.83 8.83 0 0 0 4.874 4.874l.58-1.16a1 1 0 0 1 1.06-.528l3.3.55a1 1 0 0 1 .836.99V14a1 1 0 0 1-1 1H13C6.373 15 1 9.627 1 3V2Z"/></svg>
           Gọi ngay
@@ -651,7 +650,7 @@ export default function ProfilePage() {
           <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4"><path d="M12 2C6.48 2 2 6.48 2 12c0 2.54.94 4.86 2.5 6.63L3 22l3.67-1.33A9.96 9.96 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2z"/></svg>
           Nhắn Zalo
         </a>
-        <button className="flex-1 flex items-center justify-center gap-1.5 border-2 border-green-200 text-green-700 hover:bg-green-50 font-700 text-sm py-3 rounded-xl transition-colors">
+        <button className="flex-1 flex items-center justify-center gap-1.5 border-2 border-green-600 text-green-700 hover:bg-green-50 font-700 text-sm py-3 rounded-xl transition-colors">
           <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.8" className="w-4 h-4"><path d="M2 8c0-3 2.7-5.5 6-5.5s6 2.5 6 5.5-2.7 5.5-6 5.5c-.7 0-1.4-.1-2-.3L2 15l.5-2.5A5.3 5.3 0 0 1 2 8z"/></svg>
           Gửi nhu cầu
         </button>
