@@ -627,43 +627,9 @@ export default function ProfilePage() {
               </button>
             </div>
 
-            {/* Quick filter bar — 3 rows matching ref design */}
-            <div className="px-4 sm:px-7 py-3 border-b border-gray-100 space-y-2.5 bg-gray-50/50">
-              {/* Row 1: tx type tabs + Loại BĐS */}
-              <div className="flex items-center justify-between gap-2">
-                <div className="flex items-center bg-white rounded-xl border border-gray-200 p-0.5">
-                  {([['all','Tất cả'], ['sell','Bán'], ['rent','Cho thuê']] as const).map(([v, l]) => (
-                    <button key={v} onClick={() => setFilter(f => ({ ...f, txType: v }))}
-                      className={`text-xs font-600 px-3 py-1.5 rounded-[10px] transition-colors ${filter.txType === v ? 'bg-green-600 text-white shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}>
-                      {l}
-                    </button>
-                  ))}
-                </div>
-                <select className="text-xs text-gray-600 border border-gray-200 rounded-xl px-2.5 py-1.5 bg-white outline-none">
-                  <option>Loại BĐS</option><option>Nhà phố</option><option>Đất nền</option><option>Căn hộ</option><option>Biệt thự</option>
-                </select>
-              </div>
-              {/* Row 2: Khoảng giá + Bộ lọc nâng cao */}
-              <div className="flex items-center gap-2">
-                <select className="text-xs text-gray-600 border border-gray-200 rounded-xl px-2.5 py-1.5 bg-white outline-none">
-                  <option>Khoảng giá</option><option>Dưới 2 tỷ</option><option>2–5 tỷ</option><option>5–10 tỷ</option><option>Trên 10 tỷ</option>
-                </select>
-                <button onClick={() => setShowFilter(true)} className="text-xs font-600 text-green-700 border border-green-300 hover:border-green-500 hover:bg-green-50 bg-white px-3 py-1.5 rounded-xl transition-colors flex items-center gap-1.5">
-                  <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.6" className="w-3.5 h-3.5"><path d="M1.5 3.5h11M3.5 7h7M5.5 10.5h3"/></svg>
-                  Bộ lọc nâng cao
-                </button>
-              </div>
-              {/* Row 3: sort — right-aligned */}
-              <div className="flex justify-end">
-                <select className="text-xs text-gray-600 border border-gray-200 rounded-xl px-2.5 py-1.5 bg-white outline-none">
-                  <option>Mới nhất</option><option>Giá tăng dần</option><option>Giá giảm dần</option><option>Diện tích lớn</option>
-                </select>
-              </div>
-            </div>
-
             {/* Grid */}
             <div className="p-5 sm:p-7">
-              <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {LISTINGS.map(l => <ListingCard key={l.id} l={l} />)}
               </div>
             </div>
