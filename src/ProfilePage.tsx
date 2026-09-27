@@ -354,7 +354,6 @@ export default function ProfilePage() {
   const [showQR, setShowQR] = useState(false)
   const [showFilter, setShowFilter] = useState(false)
   const [filter, setFilter] = useState<FilterState>({ ...DEFAULT_FILTER })
-  const [needsExpanded, setNeedsExpanded] = useState(false)
 
   return (
     <div className="min-h-screen bg-[#F3F4F6]" style={{ fontFamily: "'Outfit', sans-serif" }}>
@@ -407,52 +406,52 @@ export default function ProfilePage() {
           {/* ── Profile card ── */}
           <div className="mx-4 sm:mx-6 bg-white rounded-2xl -mt-8 relative shadow-sm border border-gray-100 px-5 sm:px-7 pt-4 pb-6 mb-4">
 
-            {/* Top row: avatar + name + 3 CTAs */}
-            <div className="flex items-start gap-4 -mt-14 mb-4">
-              {/* Avatar */}
-              <div className="relative flex-shrink-0">
-                <div className="w-20 h-20 lg:w-24 lg:h-24 rounded-full bg-gradient-to-br from-green-500 to-emerald-700 border-4 border-white shadow-lg flex items-center justify-center text-white font-800 text-2xl select-none">
-                  AB
-                </div>
-                <div className="absolute bottom-1 right-0 w-6 h-6 bg-green-500 rounded-full border-2 border-white flex items-center justify-center">
-                  <svg viewBox="0 0 12 12" fill="white" className="w-3 h-3"><path d="M10 3L5 8.5 2 5.5l1-1 2 2 4-4.5 1 1z"/></svg>
-                </div>
+            {/* Avatar — sticks up above card into cover */}
+            <div className="relative flex-shrink-0 -mt-12 mb-3">
+              <div className="w-20 h-20 lg:w-24 lg:h-24 rounded-full bg-gradient-to-br from-green-500 to-emerald-700 border-4 border-white shadow-lg flex items-center justify-center text-white font-800 text-2xl select-none">
+                AB
               </div>
+              <div className="absolute bottom-1 right-0.5 w-6 h-6 bg-green-500 rounded-full border-2 border-white flex items-center justify-center">
+                <svg viewBox="0 0 12 12" fill="white" className="w-3 h-3"><path d="M10 3L5 8.5 2 5.5l1-1 2 2 4-4.5 1 1z"/></svg>
+              </div>
+            </div>
 
-              {/* Name block */}
-              <div className="pt-8 lg:pt-10 flex-1 min-w-0">
+            {/* Name row + CTAs — same horizontal line */}
+            <div className="flex items-center gap-3 mb-2">
+              <div className="flex-1 min-w-0">
                 <h1 className="text-xl lg:text-2xl font-800 text-gray-900 leading-tight">{AGENT.name}</h1>
-                <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mt-1.5">
-                  <span className="flex items-center gap-1">
-                    <Stars rating={AGENT.rating} />
-                    <span className="text-sm font-600 text-gray-700">{AGENT.rating}/5</span>
-                    <span className="text-xs text-gray-400">({AGENT.reviewCount})</span>
-                  </span>
-                  <span className="hidden sm:inline w-px h-4 bg-gray-200" />
-                  <span className="text-xs text-gray-500 flex items-center gap-1">
-                    <svg viewBox="0 0 14 14" fill="none" stroke="#9CA3AF" strokeWidth="1.4" className="w-3 h-3"><circle cx="7" cy="7" r="5.5"/><path d="M7 4v3l2 1"/></svg>
-                    {AGENT.responseTime}
-                  </span>
-                  <span className="hidden sm:inline w-px h-4 bg-gray-200" />
-                  <span className="text-xs text-gray-500">{AGENT.deals} giao dịch</span>
-                </div>
               </div>
-
-              {/* 3 CTA buttons — desktop, float right aligned with name */}
-              <div className="hidden lg:flex items-center gap-2 pt-10 flex-shrink-0">
-                <a href={`tel:${AGENT.phoneRaw}`} className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-700 text-sm px-4 py-2.5 rounded-xl transition-colors shadow-sm whitespace-nowrap">
+              {/* 3 CTA buttons — desktop only, right side of name row */}
+              <div className="hidden lg:flex items-center gap-2 flex-shrink-0">
+                <a href={`tel:${AGENT.phoneRaw}`} className="flex items-center gap-1.5 bg-green-600 hover:bg-green-700 text-white font-700 text-sm px-4 py-2 rounded-xl transition-colors shadow-sm whitespace-nowrap">
                   <svg viewBox="0 0 16 16" fill="currentColor" className="w-3.5 h-3.5"><path d="M1.5 2a1 1 0 0 1 1-1h1.6a1 1 0 0 1 .99.836l.55 3.3a1 1 0 0 1-.528 1.06l-1.16.58a8.83 8.83 0 0 0 4.874 4.874l.58-1.16a1 1 0 0 1 1.06-.528l3.3.55a1 1 0 0 1 .836.99V14a1 1 0 0 1-1 1H13C6.373 15 1 9.627 1 3V2Z"/></svg>
                   Gọi ngay
                 </a>
-                <a href={`https://zalo.me/${AGENT.zalo}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 bg-[#0068FF] hover:bg-blue-700 text-white font-700 text-sm px-4 py-2.5 rounded-xl transition-colors whitespace-nowrap">
-                  <svg viewBox="0 0 24 24" fill="currentColor" className="w-3.5 h-3.5"><path d="M12 2C6.48 2 2 6.48 2 12c0 2.54.94 4.86 2.5 6.63L3 22l3.67-1.33A9.96 9.96 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2z"/></svg>
+                <a href={`https://zalo.me/${AGENT.zalo}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 bg-[#0068FF] hover:bg-blue-700 text-white font-700 text-sm px-4 py-2 rounded-xl transition-colors whitespace-nowrap">
+                  <span className="w-2 h-2 rounded-full bg-white/70 flex-shrink-0" />
                   Nhắn Zalo
                 </a>
-                <button onClick={() => setNeedsExpanded(true)} className="flex items-center gap-2 border border-green-300 text-green-700 hover:bg-green-50 font-600 text-sm px-4 py-2.5 rounded-xl transition-colors whitespace-nowrap">
+                <button className="flex items-center gap-1.5 border border-gray-300 hover:border-green-300 hover:bg-green-50 text-gray-700 hover:text-green-700 font-600 text-sm px-4 py-2 rounded-xl transition-colors whitespace-nowrap">
                   <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.6" className="w-3.5 h-3.5"><path d="M2 8c0-3 2.7-5.5 6-5.5s6 2.5 6 5.5-2.7 5.5-6 5.5c-.7 0-1.4-.1-2-.3L2 15l.5-2.5A5.3 5.3 0 0 1 2 8z"/></svg>
                   Gửi nhu cầu
                 </button>
               </div>
+            </div>
+
+            {/* Rating + meta — below name */}
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mb-4">
+              <span className="flex items-center gap-1">
+                <Stars rating={AGENT.rating} />
+                <span className="text-sm font-600 text-gray-700">{AGENT.rating}/5</span>
+                <span className="text-xs text-gray-400">({AGENT.reviewCount})</span>
+              </span>
+              <span className="w-px h-4 bg-gray-200" />
+              <span className="text-xs text-gray-500 flex items-center gap-1">
+                <svg viewBox="0 0 14 14" fill="none" stroke="#9CA3AF" strokeWidth="1.4" className="w-3 h-3"><circle cx="7" cy="7" r="5.5"/><path d="M7 4v3l2 1"/></svg>
+                {AGENT.responseTime}
+              </span>
+              <span className="w-px h-4 bg-gray-200" />
+              <span className="text-xs text-gray-500">{AGENT.deals} giao dịch</span>
             </div>
 
             {/* Location + badges */}
@@ -538,29 +537,38 @@ export default function ProfilePage() {
               </button>
             </div>
 
-            {/* Quick filter bar */}
-            <div className="px-5 sm:px-7 py-3 border-b border-gray-50 flex flex-wrap items-center gap-2 bg-gray-50/60">
-              <div className="flex items-center bg-white rounded-xl border border-gray-200 p-0.5 gap-0">
-                {([['all','Tất cả'], ['sell','Bán'], ['rent','Cho thuê']] as const).map(([v, l]) => (
-                  <button key={v} onClick={() => setFilter(f => ({ ...f, txType: v }))}
-                    className={`text-xs font-600 px-3 py-1.5 rounded-[10px] transition-colors ${filter.txType === v ? 'bg-green-600 text-white shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}>
-                    {l}
-                  </button>
-                ))}
+            {/* Quick filter bar — 3 rows matching ref design */}
+            <div className="px-4 sm:px-7 py-3 border-b border-gray-100 space-y-2.5 bg-gray-50/50">
+              {/* Row 1: tx type tabs + Loại BĐS */}
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center bg-white rounded-xl border border-gray-200 p-0.5">
+                  {([['all','Tất cả'], ['sell','Bán'], ['rent','Cho thuê']] as const).map(([v, l]) => (
+                    <button key={v} onClick={() => setFilter(f => ({ ...f, txType: v }))}
+                      className={`text-xs font-600 px-3 py-1.5 rounded-[10px] transition-colors ${filter.txType === v ? 'bg-green-600 text-white shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}>
+                      {l}
+                    </button>
+                  ))}
+                </div>
+                <select className="text-xs text-gray-600 border border-gray-200 rounded-xl px-2.5 py-1.5 bg-white outline-none">
+                  <option>Loại BĐS</option><option>Nhà phố</option><option>Đất nền</option><option>Căn hộ</option><option>Biệt thự</option>
+                </select>
               </div>
-              <select className="text-xs text-gray-600 border border-gray-200 rounded-xl px-2.5 py-1.5 bg-white outline-none">
-                <option>Loại BĐS</option><option>Nhà phố</option><option>Đất nền</option><option>Căn hộ</option><option>Biệt thự</option>
-              </select>
-              <select className="text-xs text-gray-600 border border-gray-200 rounded-xl px-2.5 py-1.5 bg-white outline-none">
-                <option>Khoảng giá</option><option>Dưới 2 tỷ</option><option>2–5 tỷ</option><option>5–10 tỷ</option><option>Trên 10 tỷ</option>
-              </select>
-              <button onClick={() => setShowFilter(true)} className="text-xs font-600 text-green-600 hover:text-green-700 border border-green-200 hover:border-green-400 bg-green-50 px-3 py-1.5 rounded-xl transition-colors flex items-center gap-1">
-                <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.6" className="w-3.5 h-3.5"><path d="M1.5 3.5h11M3.5 7h7M5.5 10.5h3"/></svg>
-                Bộ lọc nâng cao
-              </button>
-              <select className="ml-auto text-xs text-gray-600 border border-gray-200 rounded-xl px-2.5 py-1.5 bg-white outline-none">
-                <option>Mới nhất</option><option>Giá tăng dần</option><option>Giá giảm dần</option><option>Diện tích lớn</option>
-              </select>
+              {/* Row 2: Khoảng giá + Bộ lọc nâng cao */}
+              <div className="flex items-center gap-2">
+                <select className="text-xs text-gray-600 border border-gray-200 rounded-xl px-2.5 py-1.5 bg-white outline-none">
+                  <option>Khoảng giá</option><option>Dưới 2 tỷ</option><option>2–5 tỷ</option><option>5–10 tỷ</option><option>Trên 10 tỷ</option>
+                </select>
+                <button onClick={() => setShowFilter(true)} className="text-xs font-600 text-green-700 border border-green-300 hover:border-green-500 hover:bg-green-50 bg-white px-3 py-1.5 rounded-xl transition-colors flex items-center gap-1.5">
+                  <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.6" className="w-3.5 h-3.5"><path d="M1.5 3.5h11M3.5 7h7M5.5 10.5h3"/></svg>
+                  Bộ lọc nâng cao
+                </button>
+              </div>
+              {/* Row 3: sort — right-aligned */}
+              <div className="flex justify-end">
+                <select className="text-xs text-gray-600 border border-gray-200 rounded-xl px-2.5 py-1.5 bg-white outline-none">
+                  <option>Mới nhất</option><option>Giá tăng dần</option><option>Giá giảm dần</option><option>Diện tích lớn</option>
+                </select>
+              </div>
             </div>
 
             {/* Grid */}
@@ -615,7 +623,7 @@ export default function ProfilePage() {
       <footer className="bg-gray-900 text-gray-400">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
           {/* CTA band */}
-          <div className="py-10 border-b border-gray-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
+          <div className="py-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
             <div>
               <h3 className="text-white font-700 text-base mb-1">Bạn cũng là nhà môi giới bất động sản?</h3>
               <p className="text-sm text-gray-400">Tạo Profile cá nhân, đăng BĐS và nhận khách hàng qua một đường link duy nhất.</p>
@@ -623,29 +631,6 @@ export default function ProfilePage() {
             <a href="/" className="flex-shrink-0 bg-green-600 hover:bg-green-500 text-white font-700 text-sm px-6 py-3 rounded-xl transition-colors whitespace-nowrap">
               Đăng ký miễn phí
             </a>
-          </div>
-
-          {/* Links + logo */}
-          <div className="py-8 grid sm:grid-cols-3 gap-8">
-            <div>
-              <div className="flex items-center gap-2 mb-3">
-                <img src={logoMark} className="w-7 h-7 object-contain" alt="AgentLink" />
-                <span className="font-700 text-white text-[15px]">Agent<span className="text-green-400">Link</span></span>
-              </div>
-              <p className="text-xs text-gray-500 leading-relaxed">Nền tảng tạo Profile và phân phối BĐS cho môi giới chuyên nghiệp.</p>
-            </div>
-            <div>
-              <p className="text-xs font-700 text-gray-500 uppercase tracking-widest mb-3">Tính năng</p>
-              {['Profile cá nhân','Bộ sưu tập BĐS','Quản lý tin đăng','Mã QR & chia sẻ'].map(l => (
-                <a key={l} href="/" className="block text-sm text-gray-400 hover:text-white transition-colors mb-1.5">{l}</a>
-              ))}
-            </div>
-            <div>
-              <p className="text-xs font-700 text-gray-500 uppercase tracking-widest mb-3">Hỗ trợ</p>
-              {['Hướng dẫn sử dụng','Liên hệ AgentLink','Điều khoản dịch vụ','Chính sách bảo mật'].map(l => (
-                <a key={l} href="/" className="block text-sm text-gray-400 hover:text-white transition-colors mb-1.5">{l}</a>
-              ))}
-            </div>
           </div>
 
           {/* Copyright */}
