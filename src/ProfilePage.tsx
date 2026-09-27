@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import logoMark from '@/assets/logo-mark.png'
 import heroBg from '@/assets/profile-hero-bg.avif'
 
@@ -272,6 +272,129 @@ function FilterDrawer({ filter, onApply, onClose }: {
   )
 }
 
+/* ─── Collections Slider ──────────────────────────────────────── */
+function CollectionsSlider() {
+  const trackRef = useRef<HTMLDivElement>(null)
+  const [active, setActive] = useState(0)
+
+  const scrollToCard = (index: number) => {
+    const track = trackRef.current
+    if (!track) return
+    const card = track.children[index] as HTMLElement
+    if (!card) return
+    track.scrollTo({ left: card.offsetLeft - track.offsetLeft, behavior: 'smooth' })
+    setActive(index)
+  }
+
+  const handleScroll = () => {
+    const track = trackRef.current
+    if (!track) return
+    const cards = Array.from(track.children) as HTMLElement[]
+    let closest = 0
+    let minDist = Infinity
+    cards.forEach((card, i) => {
+      const dist = Math.abs(card.offsetLeft - track.offsetLeft - track.scrollLeft)
+      if (dist < minDist) { minDist = dist; closest = i }
+    })
+    setActive(closest)
+  }
+
+  return (
+    <div className="mx-4 sm:mx-6 bg-white rounded-2xl border border-gray-100 shadow-sm mb-4 overflow-hidden">
+      {/* Header */}
+      <div className="px-5 sm:px-7 py-4 flex items-center justify-between">
+        <h2 className="font-700 text-gray-900 text-base flex items-center gap-2">
+          <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="1.7" className="w-4.5 h-4.5 text-green-600"><rect x="1" y="5" width="16" height="11" rx="1.5"/><path d="M5 5V3.5A1.5 1.5 0 0 1 6.5 2h5A1.5 1.5 0 0 1 13 3.5V5"/></svg>
+          Bộ sưu tập
+          <span className="text-xs font-600 text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">{AGENT.collectionCount}</span>
+        </h2>
+        {/* Arrow controls */}
+        <div className="flex items-center gap-1.5">
+          <button
+            onClick={() => scrollToCard(Math.max(0, active - 1))}
+            disabled={active === 0}
+            className="w-8 h-8 flex items-center justify-center rounded-full border border-gray-200 text-gray-400 hover:border-green-400 hover:text-green-600 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+            aria-label="Trước"
+          >
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" className="w-3.5 h-3.5"><path d="M10 12 6 8l4-4"/></svg>
+          </button>
+          <button
+            onClick={() => scrollToCard(Math.min(COLLECTIONS.length - 1, active + 1))}
+            disabled={active === COLLECTIONS.length - 1}
+            className="w-8 h-8 flex items-center justify-center rounded-full border border-gray-200 text-gray-400 hover:border-green-400 hover:text-green-600 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+            aria-label="Tiếp theo"
+          >
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" className="w-3.5 h-3.5"><path d="M6 4l4 4-4 4"/></svg>
+          </button>
+        </div>
+      </div>
+
+      {/* Track */}
+      <div
+        ref={trackRef}
+        onScroll={handleScroll}
+        className="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide px-5 sm:px-7 pb-6"
+      >
+        {COLLECTIONS.map((c) => (
+          <div
+            key={c.id}
+            className="snap-start flex-shrink-0 w-[78%] sm:w-[44%] lg:w-[30%] group cursor-pointer"
+          >
+            {/* Image */}
+            <div className="relative rounded-2xl overflow-hidden mb-3" style={{ aspectRatio: '4/3' }}>
+              <img
+                src={c.img}
+                alt={c.title}
+                loading="lazy"
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+              {/* Gradient */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+              {/* Badge */}
+              {c.hot
+                ? <span className="absolute top-3 left-3 text-[10px] font-700 bg-red-500 text-white px-2.5 py-1 rounded-full">🔥 HOT</span>
+                : <span className="absolute top-3 left-3 text-[10px] font-600 bg-black/50 backdrop-blur-sm text-white/90 px-2.5 py-1 rounded-full">{c.label}</span>
+              }
+              {/* Count pill */}
+              <div className="absolute top-3 right-3 bg-white/20 backdrop-blur-sm border border-white/30 text-white text-[10px] font-700 px-2 py-1 rounded-full">
+                {c.count} căn
+              </div>
+              {/* Title overlay at bottom */}
+              <div className="absolute bottom-0 left-0 right-0 px-4 pb-4 pt-8">
+                <h3 className="text-sm font-700 text-white leading-snug line-clamp-2">{c.title}</h3>
+              </div>
+            </div>
+            {/* Below card */}
+            <div className="flex items-center justify-between px-1">
+              <span className="text-xs text-green-700 bg-green-50 border border-green-100 px-2.5 py-1 rounded-full font-600">{c.tag}</span>
+              <span className="text-xs text-gray-400 flex items-center gap-0.5 font-500">
+                Xem tất cả
+                <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.8" className="w-3 h-3"><path d="M2 6h8M7 3l3 3-3 3"/></svg>
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Dot indicators */}
+      <div className="flex items-center justify-center gap-1.5 pb-4">
+        {COLLECTIONS.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => scrollToCard(i)}
+            aria-label={`Bộ sưu tập ${i + 1}`}
+            className={`rounded-full transition-all duration-300 ${
+              i === active
+                ? 'w-5 h-1.5 bg-green-600'
+                : 'w-1.5 h-1.5 bg-gray-300 hover:bg-gray-400'
+            }`}
+          />
+        ))}
+      </div>
+    </div>
+  )
+}
+
 /* ─── Listing Card (inspired by ref3 clean style) ─────────────── */
 function ListingCard({ l }: { l: typeof LISTINGS[0] }) {
   const badgeColor: Record<string, string> = {
@@ -486,40 +609,8 @@ export default function ProfilePage() {
             </div>
           </div>
 
-          {/* ── Collections — separate block ── */}
-          <div className="mx-4 sm:mx-6 bg-white rounded-2xl border border-gray-100 shadow-sm mb-4 overflow-hidden">
-            <div className="px-5 sm:px-7 py-4 border-b border-gray-50 flex items-center justify-between">
-              <h2 className="font-700 text-gray-900 text-base flex items-center gap-2">
-                <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="1.7" className="w-4.5 h-4.5 text-green-600"><rect x="1" y="5" width="16" height="11" rx="1.5"/><path d="M5 5V3.5A1.5 1.5 0 0 1 6.5 2h5A1.5 1.5 0 0 1 13 3.5V5"/></svg>
-                Bộ sưu tập
-                <span className="text-xs font-600 text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">{AGENT.collectionCount}</span>
-              </h2>
-            </div>
-            <div className="p-5 sm:p-7 grid sm:grid-cols-3 gap-4">
-              {COLLECTIONS.map(c => (
-                <div key={c.id} className="group cursor-pointer">
-                  <div className="relative rounded-xl overflow-hidden mb-3" style={{ aspectRatio: '16/9' }}>
-                    <img src={c.img} alt={c.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                    {c.hot
-                      ? <span className="absolute top-2.5 left-2.5 text-[10px] font-700 bg-red-500 text-white px-2 py-0.5 rounded-full">🔥 {c.label}</span>
-                      : <span className="absolute top-2.5 left-2.5 text-[10px] font-700 bg-black/50 backdrop-blur-sm text-white px-2 py-0.5 rounded-full">{c.label}</span>
-                    }
-                    <div className="absolute bottom-2.5 left-3 right-3">
-                      <h3 className="text-xs font-700 text-white leading-snug line-clamp-2">{c.title}</h3>
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs text-green-700 bg-green-50 border border-green-100 px-2 py-0.5 rounded-full font-600">{c.tag}</span>
-                    <span className="text-xs text-gray-400 flex items-center gap-0.5">
-                      {c.count} căn
-                      <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-3 h-3"><path d="M2 6h8M7 3l3 3-3 3"/></svg>
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+          {/* ── Collections — Slider ── */}
+          <CollectionsSlider />
 
           {/* ── Listings — separate block ── */}
           <div className="mx-4 sm:mx-6 bg-white rounded-2xl border border-gray-100 shadow-sm mb-4 overflow-hidden">
