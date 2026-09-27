@@ -519,61 +519,75 @@ export default function ProfilePage() {
       <div className="pt-14 pb-24 lg:pb-12">
         <div className="max-w-5xl mx-auto">
 
-          {/* ── Cover ── */}
-          <div className="relative h-44 sm:h-56 lg:h-64 overflow-hidden">
-            <img src={heroBg} alt="Cover" className="w-full h-full object-cover object-center" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
-          </div>
+          {/* ── Cover + overlaid profile header ── */}
+          <div className="relative">
+            {/* Image + gradient + name/meta/CTAs — all clipped to cover bounds */}
+            <div className="relative h-52 sm:h-64 lg:h-72 overflow-hidden">
+              <img src={heroBg} alt="" className="w-full h-full object-cover object-center" />
+              {/* Strong bottom gradient for text legibility */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-transparent" />
+              {/* Profile info overlaid at bottom of cover */}
+              <div className="absolute bottom-0 inset-x-0 px-5 sm:px-7 pb-5 flex items-end justify-between gap-3">
+                <div className="pl-[5.5rem] sm:pl-[6.5rem] min-w-0">
+                  <h1 className="text-xl sm:text-2xl font-800 text-white leading-tight">{AGENT.name}</h1>
+                  <div className="flex items-center gap-1.5 mt-1 flex-wrap">
+                    <Stars rating={AGENT.rating} />
+                    <span className="text-sm font-600 text-white">{AGENT.rating}/5</span>
+                    <span className="text-xs text-white/60">({AGENT.reviewCount})</span>
+                    <span className="text-white/30 hidden sm:inline">·</span>
+                    <span className="text-xs text-white/70 hidden sm:flex items-center gap-1">
+                      <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.4" className="w-3 h-3"><circle cx="7" cy="7" r="5.5"/><path d="M7 4v3l2 1"/></svg>
+                      {AGENT.responseTime}
+                    </span>
+                    <span className="text-white/30 hidden sm:inline">·</span>
+                    <span className="text-xs text-white/70 hidden sm:inline">{AGENT.deals} giao dịch</span>
+                  </div>
+                </div>
+                {/* Desktop CTAs — right side, inside cover */}
+                <div className="hidden lg:flex items-center gap-2 flex-shrink-0">
+                  <a href={`tel:${AGENT.phoneRaw}`} className="flex items-center gap-1.5 bg-green-500 hover:bg-green-400 text-white font-700 text-sm px-4 py-2 rounded-xl transition-colors shadow-lg whitespace-nowrap">
+                    <svg viewBox="0 0 16 16" fill="currentColor" className="w-3.5 h-3.5"><path d="M1.5 2a1 1 0 0 1 1-1h1.6a1 1 0 0 1 .99.836l.55 3.3a1 1 0 0 1-.528 1.06l-1.16.58a8.83 8.83 0 0 0 4.874 4.874l.58-1.16a1 1 0 0 1 1.06-.528l3.3.55a1 1 0 0 1 .836.99V14a1 1 0 0 1-1 1H13C6.373 15 1 9.627 1 3V2Z"/></svg>
+                    Gọi ngay
+                  </a>
+                  <a href={`https://zalo.me/${AGENT.zalo}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 bg-[#0068FF] hover:bg-blue-500 text-white font-700 text-sm px-4 py-2 rounded-xl transition-colors whitespace-nowrap shadow-lg">
+                    <svg viewBox="0 0 24 24" fill="currentColor" className="w-3.5 h-3.5"><path d="M12 2C6.48 2 2 6.48 2 12c0 2.54.94 4.86 2.5 6.63L3 22l3.67-1.33A9.96 9.96 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm-1 13H9V9h2v6zm4 0h-2V9h2v6z"/></svg>
+                    Nhắn Zalo
+                  </a>
+                  <button className="flex items-center gap-1.5 bg-white/15 backdrop-blur-sm border border-white/30 hover:bg-white/25 text-white font-600 text-sm px-4 py-2 rounded-xl transition-colors whitespace-nowrap">
+                    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.6" className="w-3.5 h-3.5"><path d="M2 8c0-3 2.7-5.5 6-5.5s6 2.5 6 5.5-2.7 5.5-6 5.5c-.7 0-1.4-.1-2-.3L2 15l.5-2.5A5.3 5.3 0 0 1 2 8z"/></svg>
+                    Gửi nhu cầu
+                  </button>
+                </div>
+              </div>
+            </div>
 
-          {/* ── Profile card ── */}
-          <div className="mx-4 sm:mx-6 bg-white rounded-2xl -mt-8 relative shadow-sm border border-gray-100 px-5 sm:px-7 pt-4 pb-6 mb-4">
-
-            {/* Avatar — sticks up above card into cover */}
-            <div className="relative -mt-12 mb-3 w-fit">
-              <div className="w-20 h-20 lg:w-24 lg:h-24 rounded-full bg-gradient-to-br from-green-500 to-emerald-700 border-4 border-white shadow-lg flex items-center justify-center text-white font-800 text-2xl select-none">
+            {/* Avatar — straddles cover/card boundary, outside overflow-hidden */}
+            <div className="absolute left-5 sm:left-7 bottom-0 translate-y-1/2 z-10">
+              <div className="w-[4.5rem] h-[4.5rem] sm:w-20 sm:h-20 lg:w-24 lg:h-24 rounded-full bg-gradient-to-br from-green-500 to-emerald-700 border-4 border-white shadow-xl flex items-center justify-center text-white font-800 text-xl sm:text-2xl select-none">
                 AB
               </div>
-              <div className="absolute bottom-1 right-0.5 w-6 h-6 bg-green-500 rounded-full border-2 border-white flex items-center justify-center">
-                <svg viewBox="0 0 12 12" fill="white" className="w-3 h-3"><path d="M10 3L5 8.5 2 5.5l1-1 2 2 4-4.5 1 1z"/></svg>
+              <div className="absolute bottom-0.5 right-0 w-5 h-5 sm:w-6 sm:h-6 bg-green-500 rounded-full border-2 border-white flex items-center justify-center">
+                <svg viewBox="0 0 12 12" fill="white" className="w-2.5 h-2.5 sm:w-3 sm:h-3"><path d="M10 3L5 8.5 2 5.5l1-1 2 2 4-4.5 1 1z"/></svg>
               </div>
             </div>
+          </div>
 
-            {/* Name row + CTAs — same horizontal line */}
-            <div className="flex items-center gap-3 mb-2">
-              <div className="flex-1 min-w-0">
-                <h1 className="text-xl lg:text-2xl font-800 text-gray-900 leading-tight">{AGENT.name}</h1>
-              </div>
-              {/* 3 CTA buttons — desktop only, right side of name row */}
-              <div className="hidden lg:flex items-center gap-2 flex-shrink-0">
-                <a href={`tel:${AGENT.phoneRaw}`} className="flex items-center gap-1.5 bg-green-600 hover:bg-green-700 text-white font-700 text-sm px-4 py-2 rounded-xl transition-colors shadow-sm whitespace-nowrap">
-                  <svg viewBox="0 0 16 16" fill="currentColor" className="w-3.5 h-3.5"><path d="M1.5 2a1 1 0 0 1 1-1h1.6a1 1 0 0 1 .99.836l.55 3.3a1 1 0 0 1-.528 1.06l-1.16.58a8.83 8.83 0 0 0 4.874 4.874l.58-1.16a1 1 0 0 1 1.06-.528l3.3.55a1 1 0 0 1 .836.99V14a1 1 0 0 1-1 1H13C6.373 15 1 9.627 1 3V2Z"/></svg>
-                  Gọi ngay
-                </a>
-                <a href={`https://zalo.me/${AGENT.zalo}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 bg-[#0068FF] hover:bg-blue-700 text-white font-700 text-sm px-4 py-2 rounded-xl transition-colors whitespace-nowrap">
-                  <svg viewBox="0 0 24 24" fill="currentColor" className="w-3.5 h-3.5"><path d="M12 2C6.48 2 2 6.48 2 12c0 2.54.94 4.86 2.5 6.63L3 22l3.67-1.33A9.96 9.96 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm-1 13H9V9h2v6zm4 0h-2V9h2v6z"/></svg>
-                  Nhắn Zalo
-                </a>
-                <button className="flex items-center gap-1.5 border border-gray-300 hover:border-green-300 hover:bg-green-50 text-gray-700 hover:text-green-700 font-600 text-sm px-4 py-2 rounded-xl transition-colors whitespace-nowrap">
-                  <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.6" className="w-3.5 h-3.5"><path d="M2 8c0-3 2.7-5.5 6-5.5s6 2.5 6 5.5-2.7 5.5-6 5.5c-.7 0-1.4-.1-2-.3L2 15l.5-2.5A5.3 5.3 0 0 1 2 8z"/></svg>
-                  Gửi nhu cầu
-                </button>
-              </div>
-            </div>
-
-            {/* Rating + meta — below name */}
-            <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mb-4">
-              <span className="flex items-center gap-1">
-                <Stars rating={AGENT.rating} />
-                <span className="text-sm font-600 text-gray-700">{AGENT.rating}/5</span>
-                <span className="text-xs text-gray-400">({AGENT.reviewCount})</span>
-              </span>
-              <span className="w-px h-4 bg-gray-200" />
-              <span className="text-xs text-gray-500 flex items-center gap-1">
-                <svg viewBox="0 0 14 14" fill="none" stroke="#9CA3AF" strokeWidth="1.4" className="w-3 h-3"><circle cx="7" cy="7" r="5.5"/><path d="M7 4v3l2 1"/></svg>
-                {AGENT.responseTime}
-              </span>
-              <span className="w-px h-4 bg-gray-200" />
-              <span className="text-xs text-gray-500">{AGENT.deals} giao dịch</span>
+          {/* ── Profile detail card ── */}
+          <div className="mx-4 sm:mx-6 bg-white rounded-2xl shadow-sm border border-gray-100 pt-11 sm:pt-12 px-5 sm:px-7 pb-6 mb-4">
+            {/* Mobile CTAs */}
+            <div className="flex gap-2 mb-5 lg:hidden">
+              <a href={`tel:${AGENT.phoneRaw}`} className="flex-1 flex items-center justify-center gap-1.5 bg-green-600 hover:bg-green-700 text-white font-700 text-sm py-2.5 rounded-xl transition-colors">
+                <svg viewBox="0 0 16 16" fill="currentColor" className="w-4 h-4"><path d="M1.5 2a1 1 0 0 1 1-1h1.6a1 1 0 0 1 .99.836l.55 3.3a1 1 0 0 1-.528 1.06l-1.16.58a8.83 8.83 0 0 0 4.874 4.874l.58-1.16a1 1 0 0 1 1.06-.528l3.3.55a1 1 0 0 1 .836.99V14a1 1 0 0 1-1 1H13C6.373 15 1 9.627 1 3V2Z"/></svg>
+                Gọi ngay
+              </a>
+              <a href={`https://zalo.me/${AGENT.zalo}`} target="_blank" rel="noopener noreferrer" className="flex-1 flex items-center justify-center gap-1.5 bg-[#0068FF] hover:bg-blue-700 text-white font-700 text-sm py-2.5 rounded-xl transition-colors">
+                <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4"><path d="M12 2C6.48 2 2 6.48 2 12c0 2.54.94 4.86 2.5 6.63L3 22l3.67-1.33A9.96 9.96 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm-1 13H9V9h2v6zm4 0h-2V9h2v6z"/></svg>
+                Nhắn Zalo
+              </a>
+              <button className="flex-1 flex items-center justify-center gap-1.5 border-2 border-green-600 text-green-700 hover:bg-green-50 font-700 text-sm py-2.5 rounded-xl transition-colors">
+                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.8" className="w-4 h-4"><path d="M2 8c0-3 2.7-5.5 6-5.5s6 2.5 6 5.5-2.7 5.5-6 5.5c-.7 0-1.4-.1-2-.3L2 15l.5-2.5A5.3 5.3 0 0 1 2 8z"/></svg>
+                Gửi nhu cầu
+              </button>
             </div>
 
             {/* Location + badges */}
@@ -586,14 +600,18 @@ export default function ProfilePage() {
                 <svg viewBox="0 0 12 12" fill="#16A34A" className="w-2.5 h-2.5"><path d="M6 0l1.3 2.7L10 3.5l-2 2 .5 2.8L6 7l-2.5 1.3.5-2.8-2-2L4.7 2.7z"/></svg>
                 Môi giới uy tín AgentLink
               </span>
+              {/* Response time + deals — mobile only (desktop shows in cover) */}
+              <span className="inline-flex items-center gap-1 text-xs text-gray-400 sm:hidden">
+                <svg viewBox="0 0 14 14" fill="none" stroke="#9CA3AF" strokeWidth="1.4" className="w-3 h-3"><circle cx="7" cy="7" r="5.5"/><path d="M7 4v3l2 1"/></svg>
+                {AGENT.responseTime} · {AGENT.deals} giao dịch
+              </span>
             </div>
 
             {/* Bio */}
             <p className="text-sm text-gray-600 leading-relaxed mb-5 max-w-2xl">{AGENT.bio}</p>
 
-            {/* Border divider */}
+            {/* Stats widget */}
             <div className="border-t border-gray-100 pt-4">
-              {/* Stats widget (ref1) */}
               <div className="grid grid-cols-3 divide-x divide-gray-100">
                 {[
                   { label: 'BĐS đang đăng', value: AGENT.listingCount },
